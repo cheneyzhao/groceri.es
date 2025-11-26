@@ -16,7 +16,7 @@ LOGGER = logging.getLogger(__name__)
 SETTING_DEFAULTS = {
     "allow_user_registration" :  True,
     "default_servings"        :  2,
-    "default_language"        :  "en-us",
+    "default_language"        :  "de",
     "grocery_day"             :  "sat",
 }
 
@@ -88,7 +88,7 @@ def recipe_new():
         )
         session = db.session
         session.add(recipe)
-        session.commit()
+        #session.commit()
         LOGGER.info("Created recipe %s", form.name.data)
         return redirect(url_for('recipe', id=recipe.id))
     else:
@@ -211,11 +211,11 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(name=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
+        if not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('login'))
 
-        login_user(user, remember=form.remember_me.data)
+        login_user(user, remember=form.rememberme.data)
         return redirect(url_for('home'))
 
     return render_template('login.html', form=form, register_link=url_for("register"))
@@ -273,7 +273,7 @@ def generator():
     grocery_day             = Setting('grocery_day', 'sat')
     default_servings        = Setting('default_servings', '2')
     allow_user_registration = Setting('allow_user_registration', 'true')
-    default_language        = Setting('default_language', 'en')
+    default_language        = Setting('default_language', 'de')
 
     starter   = Category('Starter')
     main      = Category('Main')
