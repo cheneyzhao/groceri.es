@@ -1,0 +1,115 @@
+{% set navigation_bar = [
+    ('/recipes', 'recipes', 'Recipes'),
+    ('/groceries', 'groceries', 'Groceries'),
+    ('/pantry', 'pantry', 'Pantry'),
+    ('/settings', 'settings', 'Settings')
+] %}
+{% set active_page = active_page|default('home') %}
+
+<!doctype html>
+<html>
+<head>
+  <title>{% if title %}{{ title }} - {% endif %}groceri.es</title>
+  <link rel="shortcut icon" href="/static/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.4/semantic.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css">
+  <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.4/semantic.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.4/components/search.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.4/components/accordion.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  <style>
+    .flexbox {
+      display: flex;
+    }
+    .sidebar {
+      flex: 0 0 auto;
+      width: 270px;
+    }
+    @media (min-width: 600px) {
+      .bottombar {
+        display: none;
+      }
+    }
+    @media only screen and (max-width: 600px) {
+      .sidebar {
+        display: none;
+      }
+      .bottombar {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body class="flexbox">
+  <div class="sidebar"><nav class="ui left vertical inverted visible sidebar menu">
+    <a href="/" class="item ui logo icon image{% if active_page == 'home' %} active{% endif %}">
+      <!-- <img src="/static/logos/logo_transparent_notext.png" style="max-width: 3rem; height: auto; margin-right: 1rem;"> -->
+      <i class="leaf icon"></i><b>groceri.es</b>
+    </a>
+    {% for href, id, caption in navigation_bar %}
+      <a href="{{ href }}" class="{% if id == active_page %}active{% endif %} item"><b>{{ caption }}</b></a>
+    {% endfor %}
+  </nav></div>
+
+  <div class="bottombar"><nav class="ui five item bottom fixed inverted labeled icon menu">
+    <a class="item" href="/">
+      <i class="leaf icon{% if active_page == 'home' %} active{% endif %}"></i>
+      Home
+    </a>
+    <a class="item" href="/recipes">
+      <i class="file alternate icon{% if active_page == 'recipes' %} active{% endif %}"></i>
+      Recipes
+    </a>
+    <a class="item" href="/groceries">
+      <i class="shopping basket icon{% if active_page == 'groceries' %} active{% endif %}"></i>
+      Groceries
+    </a>
+    <a class="item" href="/pantry">
+      <i class="store icon{% if active_page == 'pantry' %} active{% endif %}"></i>
+      Pantry
+    </a>
+    <a class="item" href="/settings">
+      <i class="tools icon{% if active_page == 'settings' %} active{% endif %}"></i>
+      Settings
+    </a>
+  </nav></div>
+
+  <main class="ui container" style="padding-top: 1rem;">
+    {% block content %}{% endblock %}
+    <div class="ui divider"></div>
+    <footer style="margin-bottom: 1rem;">
+      <p>
+        {% autoescape false %}
+        <i class="leaf icon"></i>groceri.es {{ _('version') }} 0.1.
+        {{ _('This software is licensed under the MIT.') }}
+        {{ _('Made out of curiosity by %(link)s.', link='<a href="https://jurian.slui.mn">Jurian Sluiman</a>') }}
+        {{ _('View the source code at %(link)s.', link='<a href="https://github.com/juriansluiman/groceri.es"><i class="github icon"></i>GitHub</a>') }}
+        {% endautoescape %}
+      </p>
+    </footer>
+  </main>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <script>
+    $(document).ready(function(){
+      {% for category, message in messages %}
+        $('body').toast({
+          message: '{{ message }}',
+          class: '{{ category }}',
+          closeIcon: true,
+          showProgress: 'top',
+          progressUp: true,
+          classProgress: 'green'
+         });
+      {% endfor %}
+    });
+    </script>
+    {% endif %}
+  {% endwith %}
+
+</body>
+</html>
