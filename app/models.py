@@ -22,6 +22,9 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         """Validate given password to the user's password"""
         return check_password_hash(self.password, password)
+    
+    def __get_email(self):
+        return self.email
 
 
 class Setting(db.Model):
@@ -53,7 +56,14 @@ class Recipe(db.Model):
 
     tags = db.relationship('Tag', secondary=recipe_tag, back_populates='recipes')
 
+class Ratings:
+    def __init__(self, numbers):
+        self.numbers = numbers
 
+def cal_avg_rating(ratings = Ratings([1,2,3])):
+    a, b, c = ratings
+    return (a + b + c)/3
+  
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), nullable=False)

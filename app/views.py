@@ -243,6 +243,7 @@ def register():
         session.add(user)
         session.commit()
         LOGGER.info("Created user %s", form.username.data)
+        LOGGER.debug("User email %s", user.__get_email())
 
         login_user(user, remember=False)
         return redirect(url_for('home'))
@@ -373,7 +374,6 @@ def generator():
     session.add(recipe4)
     session.add(recipe5)
     session.add(recipe6)
-    session.add(recipe7)
     session.add(recipe8)
     session.add(recipe9)
     session.add(recipe10)

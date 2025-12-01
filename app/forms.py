@@ -10,7 +10,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Sign In')
 
 
-def validate_password(form, field):
+def validate_password(form, field, pwd):
     import re
     password = field.data
     pattern = r"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%&]).{8,12}$"
